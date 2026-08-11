@@ -1,51 +1,27 @@
-name: 🐙 Baixar Repositórios GitHub
+name: 📦 Baixar meus repositórios
 
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-
-  download-repositories:
-
-    name: 📦 Baixar repositórios
-
+  download:
     runs-on: ubuntu-latest
 
     steps:
-
-      # ------------------------------------------------------
-      # 1. Checkout do próprio projeto
-      # ------------------------------------------------------
-
       - name: 📥 Checkout
         uses: actions/checkout@v4
-
-      # ------------------------------------------------------
-      # 2. Instalar Python
-      # ------------------------------------------------------
 
       - name: 🐍 Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # ------------------------------------------------------
-      # 3. Verificar Git
-      # ------------------------------------------------------
-
-      - name: 🔧 Verificar Git
+      - name: 📦 Instalar dependências
         run: |
-          git --version
-          python --version
+          python -m pip install --upgrade pip
+          pip install requests
 
-      # ------------------------------------------------------
-      # 4. Executar downloader
-      # ------------------------------------------------------
-
-      - name: 📦 Baixar repositórios
+      - name: 🚀 Baixar repositórios
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
@@ -53,28 +29,3 @@ jobs:
             --mine \
             --output github_repos \
             --skip-archived
-
-      # ------------------------------------------------------
-      # 5. Criar ZIP
-      # ------------------------------------------------------
-
-      - name: 📦 Compactar repositórios
-        run: |
-          if [ -d "github_repos" ]; then
-            zip -r github_repos.zip github_repos
-          else
-            echo "❌ Pasta github_repos não encontrada."
-            exit 1
-          fi
-
-      # ------------------------------------------------------
-      # 6. Disponibilizar ZIP como artefato
-      # ------------------------------------------------------
-
-      - name: ⬆️ Upload dos repositórios
-        uses: actions/upload-artifact@v4
-        with:
-          name: github-repositories
-          path: github_repos.zip
-          if-no-files-found: error
-          retention-days: 7
