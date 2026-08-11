@@ -55,17 +55,17 @@ EXEMPLOS
 
 ------------------------------------------------------------
 
-2. Usar GITHUB_TOKEN
+2. Usar MY_GITHUB_TOKEN
 
 Linux/macOS/Termux:
 
-    export GITHUB_TOKEN="github_pat_..."
+    export MY_GITHUB_TOKEN="github_pat_..."
 
     python github_bulk_downloader.py --mine
 
 Windows PowerShell:
 
-    $env:GITHUB_TOKEN="github_pat_..."
+    $env:MY_GITHUB_TOKEN="github_pat_..."
 
     python github_bulk_downloader.py --mine
 
@@ -918,7 +918,7 @@ def obter_token(
 ) -> str | None:
 
     token = os.environ.get(
-        "GITHUB_TOKEN"
+        "MY_GITHUB_TOKEN"
     )
 
     if token:
@@ -1199,7 +1199,7 @@ def main() -> int:
         )
 
         print(
-            "  export GITHUB_TOKEN="
+            "  export MY_GITHUB_TOKEN="
             '"github_pat_..."'
         )
 
